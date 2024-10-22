@@ -8,7 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		CE1A28C32CC6AA4F00B887DD /* libEndpointSecurity.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = CE1A28C22CC6AA4F00B887DD /* libEndpointSecurity.tbd */; };
-		CE1A28CB2CC6AA4F00B887DD /* com.apriorit.EndpointSecurityApp.Extension.systemextension in Embed System Extensions */ = {isa = PBXBuildFile; fileRef = CE1A28C02CC6AA4F00B887DD /* com.apriorit.EndpointSecurityApp.Extension.systemextension */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		CE1A28CB2CC6AA4F00B887DD /* com.apriorit.hnatenko.EndpointSecurityApp.Extension.systemextension in Embed System Extensions */ = {isa = PBXBuildFile; fileRef = CE1A28C02CC6AA4F00B887DD /* com.apriorit.hnatenko.EndpointSecurityApp.Extension.systemextension */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		CE1A28F72CC7FBEC00B887DD /* SystemExtensions.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CE1A28F62CC7FBEC00B887DD /* SystemExtensions.framework */; };
 /* End PBXBuildFile section */
 
@@ -20,6 +20,13 @@
 			remoteGlobalIDString = CE1A28BF2CC6AA4F00B887DD;
 			remoteInfo = EndpointSecurityExtension;
 		};
+		CE1A29512CC8109400B887DD /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = CE1A28A12CC6A95100B887DD /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = CE1A28A82CC6A95100B887DD;
+			remoteInfo = EndpointSecurityApp;
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -29,7 +36,7 @@
 			dstPath = "$(SYSTEM_EXTENSIONS_FOLDER_PATH)";
 			dstSubfolderSpec = 16;
 			files = (
-				CE1A28CB2CC6AA4F00B887DD /* com.apriorit.EndpointSecurityApp.Extension.systemextension in Embed System Extensions */,
+				CE1A28CB2CC6AA4F00B887DD /* com.apriorit.hnatenko.EndpointSecurityApp.Extension.systemextension in Embed System Extensions */,
 			);
 			name = "Embed System Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -38,7 +45,7 @@
 
 /* Begin PBXFileReference section */
 		CE1A28A92CC6A95100B887DD /* EndpointSecurityApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = EndpointSecurityApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		CE1A28C02CC6AA4F00B887DD /* com.apriorit.EndpointSecurityApp.Extension.systemextension */ = {isa = PBXFileReference; explicitFileType = "wrapper.system-extension"; includeInIndex = 0; path = com.apriorit.EndpointSecurityApp.Extension.systemextension; sourceTree = BUILT_PRODUCTS_DIR; };
+		CE1A28C02CC6AA4F00B887DD /* com.apriorit.hnatenko.EndpointSecurityApp.Extension.systemextension */ = {isa = PBXFileReference; explicitFileType = "wrapper.system-extension"; includeInIndex = 0; path = com.apriorit.hnatenko.EndpointSecurityApp.Extension.systemextension; sourceTree = BUILT_PRODUCTS_DIR; };
 		CE1A28C22CC6AA4F00B887DD /* libEndpointSecurity.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libEndpointSecurity.tbd; path = usr/lib/libEndpointSecurity.tbd; sourceTree = SDKROOT; };
 		CE1A28F62CC7FBEC00B887DD /* SystemExtensions.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemExtensions.framework; path = System/Library/Frameworks/SystemExtensions.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
@@ -54,17 +61,17 @@
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		CE1A28AB2CC6A95100B887DD /* EndpointSecurityApp */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = EndpointSecurityApp;
-			sourceTree = "<group>";
-		};
 		CE1A28C42CC6AA4F00B887DD /* EndpointSecurityExtension */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
 				CE1A28CC2CC6AA4F00B887DD /* Exceptions for "EndpointSecurityExtension" folder in "EndpointSecurityExtension" target */,
 			);
 			path = EndpointSecurityExtension;
+			sourceTree = "<group>";
+		};
+		CE1A294A2CC80EC400B887DD /* EndpointSecurityApp */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = EndpointSecurityApp;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -92,20 +99,11 @@
 		CE1A28A02CC6A95100B887DD = {
 			isa = PBXGroup;
 			children = (
-				CE1A28AB2CC6A95100B887DD /* EndpointSecurityApp */,
+				CE1A294A2CC80EC400B887DD /* EndpointSecurityApp */,
 				CE1A28C42CC6AA4F00B887DD /* EndpointSecurityExtension */,
+				CE1A29272CC8093800B887DD /* Products */,
 				CE1A28C12CC6AA4F00B887DD /* Frameworks */,
-				CE1A28AA2CC6A95100B887DD /* Products */,
 			);
-			sourceTree = "<group>";
-		};
-		CE1A28AA2CC6A95100B887DD /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				CE1A28A92CC6A95100B887DD /* EndpointSecurityApp.app */,
-				CE1A28C02CC6AA4F00B887DD /* com.apriorit.EndpointSecurityApp.Extension.systemextension */,
-			);
-			name = Products;
 			sourceTree = "<group>";
 		};
 		CE1A28C12CC6AA4F00B887DD /* Frameworks */ = {
@@ -115,6 +113,15 @@
 				CE1A28C22CC6AA4F00B887DD /* libEndpointSecurity.tbd */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		CE1A29272CC8093800B887DD /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				CE1A28A92CC6A95100B887DD /* EndpointSecurityApp.app */,
+				CE1A28C02CC6AA4F00B887DD /* com.apriorit.hnatenko.EndpointSecurityApp.Extension.systemextension */,
+			);
+			path = Products;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -135,7 +142,7 @@
 				CE1A28CA2CC6AA4F00B887DD /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
-				CE1A28AB2CC6A95100B887DD /* EndpointSecurityApp */,
+				CE1A294A2CC80EC400B887DD /* EndpointSecurityApp */,
 			);
 			name = EndpointSecurityApp;
 			packageProductDependencies = (
@@ -155,6 +162,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				CE1A29522CC8109400B887DD /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
 				CE1A28C42CC6AA4F00B887DD /* EndpointSecurityExtension */,
@@ -163,7 +171,7 @@
 			packageProductDependencies = (
 			);
 			productName = EndpointSecurityExtension;
-			productReference = CE1A28C02CC6AA4F00B887DD /* com.apriorit.EndpointSecurityApp.Extension.systemextension */;
+			productReference = CE1A28C02CC6AA4F00B887DD /* com.apriorit.hnatenko.EndpointSecurityApp.Extension.systemextension */;
 			productType = "com.apple.product-type.system-extension";
 		};
 /* End PBXNativeTarget section */
@@ -194,7 +202,6 @@
 			mainGroup = CE1A28A02CC6A95100B887DD;
 			minimizedProjectReferenceProxies = 1;
 			preferredProjectObjectVersion = 77;
-			productRefGroup = CE1A28AA2CC6A95100B887DD /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
@@ -243,6 +250,11 @@
 			isa = PBXTargetDependency;
 			target = CE1A28BF2CC6AA4F00B887DD /* EndpointSecurityExtension */;
 			targetProxy = CE1A28C92CC6AA4F00B887DD /* PBXContainerItemProxy */;
+		};
+		CE1A29522CC8109400B887DD /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = CE1A28A82CC6A95100B887DD /* EndpointSecurityApp */;
+			targetProxy = CE1A29512CC8109400B887DD /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -386,7 +398,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MARKETING_VERSION = 1.0.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.apriorit.EndpointSecurityApp;
+				PRODUCT_BUNDLE_IDENTIFIER = com.apriorit.hnatenko.EndpointSecurityApp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -414,7 +426,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MARKETING_VERSION = 1.0.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.apriorit.EndpointSecurityApp;
+				PRODUCT_BUNDLE_IDENTIFIER = com.apriorit.hnatenko.EndpointSecurityApp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -439,7 +451,7 @@
 					"@executable_path/../../../../Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.apriorit.EndpointSecurityApp.Extension;
+				PRODUCT_BUNDLE_IDENTIFIER = com.apriorit.hnatenko.EndpointSecurityApp.Extension;
 				PRODUCT_NAME = "$(inherited)";
 				SKIP_INSTALL = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -465,7 +477,7 @@
 					"@executable_path/../../../../Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.apriorit.EndpointSecurityApp.Extension;
+				PRODUCT_BUNDLE_IDENTIFIER = com.apriorit.hnatenko.EndpointSecurityApp.Extension;
 				PRODUCT_NAME = "$(inherited)";
 				SKIP_INSTALL = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;

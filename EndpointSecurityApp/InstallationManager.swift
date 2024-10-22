@@ -11,7 +11,7 @@ import OSLog
 
 class InstallationManager : NSObject, OSSystemExtensionRequestDelegate, ObservableObject
 { 
-    private let extensionBoundleId : String = "com.apriroit.hnatenko.EndpointSecurityApp.Extension"
+    private let extensionBoundleId : String = "com.apriorit.hnatenko.EndpointSecurityApp.Extension"
     //private let extensionBoundleId : String = "com.apriorit.SampleEndpointApp.Extension"
     private var currentRequest : OSSystemExtensionRequest?
     
