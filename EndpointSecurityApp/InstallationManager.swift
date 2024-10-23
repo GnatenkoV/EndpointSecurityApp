@@ -37,7 +37,7 @@ class InstallationManager : NSObject, OSSystemExtensionRequestDelegate, Observab
             //access the values in the dictionary
             for ext in plistDict["extensions"] as! [[String : AnyObject]]
             {
-                if (ext["identifier"] as! String == extensionBoundleId)
+                if (ext["identifier"] as! String == extensionBoundleId && ext["state"] as! String == "activated_enabled")
                 {
                     return true
                 }
@@ -77,6 +77,8 @@ class InstallationManager : NSObject, OSSystemExtensionRequestDelegate, Observab
         os_log("System extension request failed %@", error.localizedDescription)
         
         status += "\nSystem extension request failed: \(error.localizedDescription)"
+        
+        isEndpointSecurityInstalled = self.isExtensionInstalled()
     }
       
       
@@ -85,6 +87,8 @@ class InstallationManager : NSObject, OSSystemExtensionRequestDelegate, Observab
         os_log("System extension requires user approval")
         
         status += "\nSystem extension requires user approval"
+        
+        isEndpointSecurityInstalled = self.isExtensionInstalled()
     }
       
       
@@ -96,6 +100,8 @@ class InstallationManager : NSObject, OSSystemExtensionRequestDelegate, Observab
         
         status += "\nReplacing extension: \(existing) \(ext)"
         
+        isEndpointSecurityInstalled = self.isExtensionInstalled()
+        
         return .replace
     }
       
@@ -105,5 +111,7 @@ class InstallationManager : NSObject, OSSystemExtensionRequestDelegate, Observab
         os_log("System extension activating request result: %d", result.rawValue)
         
         status += "\nSystem extension activating request result: \(result.rawValue)"
+        
+        isEndpointSecurityInstalled = self.isExtensionInstalled()
     }
 }

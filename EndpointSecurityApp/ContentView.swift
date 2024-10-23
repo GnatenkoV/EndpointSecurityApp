@@ -29,9 +29,9 @@ struct ContentView: View {
         installationManager.activate()
     }
     
-    private func onDeinstallationButtonPressed() -> Void
+    private func onUninstallationButtonPress() -> Void
     {
-        
+        installationManager.deactivate()
     }
     
     private func onViewDidLoad() -> Void
@@ -61,7 +61,7 @@ struct ContentView: View {
 
             if ($installationManager.isEndpointSecurityInstalled.wrappedValue)
             {
-                Button("Uninstall", systemImage : "xmark.square", action: onInstallationButtonPress)
+                Button("Uninstall", systemImage : "xmark.square", action: onUninstallationButtonPress)
                     .cornerRadius(5)
                     .padding(.top, 10)
             }

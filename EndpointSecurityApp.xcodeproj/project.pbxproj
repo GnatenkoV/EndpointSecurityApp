@@ -12,23 +12,6 @@
 		CE1A28F72CC7FBEC00B887DD /* SystemExtensions.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CE1A28F62CC7FBEC00B887DD /* SystemExtensions.framework */; };
 /* End PBXBuildFile section */
 
-/* Begin PBXContainerItemProxy section */
-		CE1A28C92CC6AA4F00B887DD /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = CE1A28A12CC6A95100B887DD /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = CE1A28BF2CC6AA4F00B887DD;
-			remoteInfo = EndpointSecurityExtension;
-		};
-		CE1A29512CC8109400B887DD /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = CE1A28A12CC6A95100B887DD /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = CE1A28A82CC6A95100B887DD;
-			remoteInfo = EndpointSecurityApp;
-		};
-/* End PBXContainerItemProxy section */
-
 /* Begin PBXCopyFilesBuildPhase section */
 		CE1A28D02CC6AA4F00B887DD /* Embed System Extensions */ = {
 			isa = PBXCopyFilesBuildPhase;
@@ -139,7 +122,6 @@
 			buildRules = (
 			);
 			dependencies = (
-				CE1A28CA2CC6AA4F00B887DD /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
 				CE1A294A2CC80EC400B887DD /* EndpointSecurityApp */,
@@ -162,7 +144,6 @@
 			buildRules = (
 			);
 			dependencies = (
-				CE1A29522CC8109400B887DD /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
 				CE1A28C42CC6AA4F00B887DD /* EndpointSecurityExtension */,
@@ -244,19 +225,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
-
-/* Begin PBXTargetDependency section */
-		CE1A28CA2CC6AA4F00B887DD /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = CE1A28BF2CC6AA4F00B887DD /* EndpointSecurityExtension */;
-			targetProxy = CE1A28C92CC6AA4F00B887DD /* PBXContainerItemProxy */;
-		};
-		CE1A29522CC8109400B887DD /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = CE1A28A82CC6A95100B887DD /* EndpointSecurityApp */;
-			targetProxy = CE1A29512CC8109400B887DD /* PBXContainerItemProxy */;
-		};
-/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		CE1A28B62CC6A95300B887DD /* Debug */ = {
