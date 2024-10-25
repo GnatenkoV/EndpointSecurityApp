@@ -14,7 +14,6 @@ struct App
 {   
     static var client1 : EndpointClient?
     static var client2 : EndpointClient?
-    static var client3 : EndpointClient?
     
     static private let appFolder : String = "/Library/Application Support/com.apriorit.hnatenko.EndpointSecurityApp"
     
@@ -49,21 +48,15 @@ struct App
         
         client1 = EndpointClient("client1")
         client2 = EndpointClient("client2")
-        client3 = EndpointClient("client3")
         
         // process protection
         client1!.subscribe(ES_EVENT_TYPE_AUTH_SIGNAL, HandlersStorage.onAuthProcSignal)
         client1!.start()
         
-        // readonly access
-        client2!.subscribe(ES_EVENT_TYPE_AUTH_OPEN, HandlersStorage.onAuthFileOpenReadonly)
-        client2!.setExtraConfig(HandlersStorage.onAuthFileOpenReadonlyConfig)
+        // denie access and readonly
+        client2!.subscribe(ES_EVENT_TYPE_AUTH_OPEN, HandlersStorage.onAuthFileOpen)
+        client2!.setExtraConfig(HandlersStorage.onAuthFileOpenConfig)
         client2!.start()
-        
-        // denie access 
-        client3!.subscribe(ES_EVENT_TYPE_AUTH_OPEN, HandlersStorage.onAuthFileOpenDenieAccess)
-        client3!.setExtraConfig(HandlersStorage.onAuthFileOpenDenieAccessConfig)
-        client3!.start()
         
         dispatchMain()
     }
