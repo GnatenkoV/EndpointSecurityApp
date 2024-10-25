@@ -8,20 +8,32 @@ public class EndpointClient
     private var connected = false
     private var events : [es_event_type_t]
     private var callbacks : [String : (OpaquePointer, UnsafePointer<es_message_t>) -> Bool]
-    private var name : String
+    private var extraConfig : ((OpaquePointer) -> Void)?
+    private var clientName : String
     
     init(_ name : String)
     {
-        self.name = name
+        self.clientName = name
         self.callbacks = [String : (OpaquePointer, UnsafePointer<es_message_t>) -> Bool]()
         self.events = [es_event_type_t]()
     }
     
-    public func subscribe(_ eventType : es_event_type_t, callback : @escaping (OpaquePointer, UnsafePointer<es_message_t>) -> Bool) -> Void
+    public func setExtraConfig(_ callback : @escaping (OpaquePointer) -> Void) -> Void
     {
         if (self.connected)
         {
-            os_log(OSLogType.info, "[%{public}@] Unable to subscribe after start() call", self.name)
+            os_log(OSLogType.info, "[%{public}@] Unable to call extaConfig after start() call", self.clientName)
+            return;
+        }
+        
+        self.extraConfig = callback
+    }
+    
+    public func subscribe(_ eventType : es_event_type_t,_ callback : @escaping (OpaquePointer, UnsafePointer<es_message_t>) -> Bool) -> Void
+    {
+        if (self.connected)
+        {
+            os_log(OSLogType.info, "[%{public}@] Unable to subscribe after start() call", self.clientName)
             return;
         }
         
@@ -36,11 +48,17 @@ public class EndpointClient
         
         if (connected)
         {
-            os_log(OSLogType.error, "[%{public}@] ESClient already connected", self.name)
+            os_log(OSLogType.error, "[%{public}@] ESClient already connected", self.clientName)
             return
         }
         
-        os_log(OSLogType.info, "[%{public}@] started to register", self.name)
+        if (events.count == 0)
+        {
+            os_log(OSLogType.error, "[%{public}@] ESClient didn't subscribe for any event", self.clientName)
+            return
+        }
+        
+        os_log(OSLogType.info, "[%{public}@] started to register", self.clientName)
         
         let creationResult = es_new_client(&client) { (_, message) in
             self.handleEvent(message)
@@ -48,7 +66,7 @@ public class EndpointClient
 
         if (creationResult != ES_NEW_CLIENT_RESULT_SUCCESS)
         {
-            os_log(OSLogType.info, "[%{public}@] Failed to create ES Client %{public}@", self.name, creationResult.rawValue)
+            os_log(OSLogType.info, "[%{public}@] Failed to create ES Client %{public}@", self.clientName, creationResult.rawValue)
             exit(EXIT_FAILURE)
         }
         
@@ -57,14 +75,19 @@ public class EndpointClient
         let signingResult = es_subscribe(client!, self.events, UInt32(self.events.count))
         if (signingResult != ES_RETURN_SUCCESS)
         {
-            os_log(OSLogType.error, "[%{public}@] Failed to subscribe to event source: %{public}@", self.name, signingResult.rawValue)
+            os_log(OSLogType.error, "[%{public}@] Failed to subscribe to event source: %{public}@", self.clientName, signingResult.rawValue)
             exit(EXIT_FAILURE)
+        }
+        
+        if (self.extraConfig != nil)
+        {
+            self.extraConfig!(client!)
         }
         
         self.esClient = client
         self.connected = true
         
-        os_log(OSLogType.info, "[%{public}@] ES Client successfuly signed for events %{public}@", self.name, self.events)
+        os_log(OSLogType.info, "[%{public}@] ES Client successfuly signed for events %{public}@", self.clientName, self.events)
     }
     
     private func handleEvent(_ message : UnsafePointer<es_message_t>) -> Void
@@ -77,7 +100,7 @@ public class EndpointClient
         
         if (events.contains(message.pointee.event_type))
         {
-            os_log(OSLogType.info, "[%{public}@] %{public}@", self.name, Utils.esEventTypeToString(message.pointee.event_type))
+            os_log(OSLogType.info, "[%{public}@] %{public}@", self.clientName, Utils.esEventTypeToString(message.pointee.event_type))
             
             // extend lifetime for message
             es_retain_message(message)
@@ -106,7 +129,7 @@ public class EndpointClient
         switch (message.pointee.event_type)
         {
         case ES_EVENT_TYPE_AUTH_OPEN:
-            es_respond_flags_result(self.esClient!, message, 0xffffffff, false);
+            es_respond_flags_result(self.esClient!, message, Utils.FALL, true);
             break;
         default:
             if (message.pointee.action_type == ES_ACTION_TYPE_AUTH)

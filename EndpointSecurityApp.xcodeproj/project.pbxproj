@@ -34,7 +34,7 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		CE1A28CC2CC6AA4F00B887DD /* Exceptions for "EndpointSecurityExtension" folder in "EndpointSecurityExtension" target */ = {
+		CEEBE4FF2CCA886C0033504D /* Exceptions for "EndpointSecurityExtension" folder in "EndpointSecurityExtension" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Info.plist,
@@ -47,7 +47,7 @@
 		CE1A28C42CC6AA4F00B887DD /* EndpointSecurityExtension */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
-				CE1A28CC2CC6AA4F00B887DD /* Exceptions for "EndpointSecurityExtension" folder in "EndpointSecurityExtension" target */,
+				CEEBE4FF2CCA886C0033504D /* Exceptions for "EndpointSecurityExtension" folder in "EndpointSecurityExtension" target */,
 			);
 			path = EndpointSecurityExtension;
 			sourceTree = "<group>";
@@ -350,6 +350,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
 				CODE_SIGN_ENTITLEMENTS = EndpointSecurityApp/EndpointSecurityApp.entitlements;
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
@@ -378,6 +379,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
 				CODE_SIGN_ENTITLEMENTS = EndpointSecurityApp/EndpointSecurityApp.entitlements;
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;

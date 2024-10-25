@@ -8,7 +8,7 @@
 import SwiftUI
 
 @main
-struct EndpointSecurityAppApp: App {
+struct EndpointSecurityApp: App {
     var body: some Scene {
         WindowGroup {
             ContentView()

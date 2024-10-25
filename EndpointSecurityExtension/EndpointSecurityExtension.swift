@@ -12,53 +12,59 @@ import OSLog
 @main
 struct App
 {   
-    static var client : EndpointClient?
+    static var client1 : EndpointClient?
+    static var client2 : EndpointClient?
+    static var client3 : EndpointClient?
+    
+    static private let appFolder : String = "/Library/Application Support/com.apriorit.hnatenko.EndpointSecurityApp"
+    
+    static func createTestFiles() -> Void
+    {
+        do
+        {
+            //  Find Application Support directory
+            let directoryURL = URL(fileURLWithPath : appFolder)
+            if (!FileManager.default.fileExists(atPath: appFolder))
+            {
+                try FileManager.default.createDirectory (at: directoryURL, withIntermediateDirectories: true, attributes: nil)
+            }
+            
+            // Create test document
+            let documentPath = directoryURL.appendingPathComponent("TestFile.txt")
+            let testInfo = "test document info"
+            try testInfo.write(to: documentPath, atomically: false, encoding: String.Encoding.utf8)
+        }
+        catch
+        {
+            os_log(OSLogType.error, "failed to create test file")
+        }
+        
+    }
     
     static func main()
     {
         os_log(OSLogType.fault, "init client")
         
-        client = EndpointClient("client1")
+        createTestFiles();
         
-        client!.subscribe(ES_EVENT_TYPE_AUTH_SIGNAL, callback: onAuthProcSignal)
-        client!.subscribe(ES_EVENT_TYPE_AUTH_OPEN, callback: onAuthFileOpen)
-        client!.start()
+        client1 = EndpointClient("client1")
+        client2 = EndpointClient("client2")
+        client3 = EndpointClient("client3")
+        
+        // process protection
+        client1!.subscribe(ES_EVENT_TYPE_AUTH_SIGNAL, HandlersStorage.onAuthProcSignal)
+        client1!.start()
+        
+        // readonly access
+        client2!.subscribe(ES_EVENT_TYPE_AUTH_OPEN, HandlersStorage.onAuthFileOpenReadonly)
+        client2!.setExtraConfig(HandlersStorage.onAuthFileOpenReadonlyConfig)
+        client2!.start()
+        
+        // denie access 
+        client3!.subscribe(ES_EVENT_TYPE_AUTH_OPEN, HandlersStorage.onAuthFileOpenDenieAccess)
+        client3!.setExtraConfig(HandlersStorage.onAuthFileOpenDenieAccessConfig)
+        client3!.start()
         
         dispatchMain()
-    }
-    
-    static func onAuthFileOpen(_ client : OpaquePointer, message : UnsafePointer<es_message_t>) -> Bool
-    {
-        //let prefix = "/Users/user/Documents/Projects"
-        
-        return false
-    }
-    
-    static func onAuthProcSignal(_ client : OpaquePointer, message : UnsafePointer<es_message_t>) -> Bool
-    {
-        os_log(OSLogType.info, "Signal received")
-        
-        let signing_id = message.pointee.event.signal.target.pointee.signing_id
-        let boundleId = NSString(bytes: signing_id.data, length: Int(signing_id.length), encoding: NSASCIIStringEncoding)
-        let appId : NSString = "com.apriorit.hnatenko.EndpointSecurityApp"
-        
-        let signal = message.pointee.event.signal.sig
-        
-        if (boundleId == appId &&
-            (signal == SIGKILL      // kill program
-             || signal == SIGSTOP   // stop (cannot be caught or ignored)
-             || signal == SIGTSTP   // stop signal generated from keyboard
-             || signal == SIGINT    // interrupt program
-             || signal == SIGQUIT   // quit program
-             || signal == SIGABRT)) // abort program
-        {
-            es_respond_auth_result(client, message, ES_AUTH_RESULT_DENY, false);
-        }
-        else
-        {
-            es_respond_auth_result(client, message, ES_AUTH_RESULT_ALLOW, true);
-        }
-        os_log(OSLogType.info, "%{public}@", boundleId!)
-        return true
     }
 }

@@ -15,8 +15,6 @@ extension View {
 }
 
 struct ContentView: View {
-    
-    @State private var viewDidLoad = false
     @ObservedObject private var installationManager = InstallationManager()
     
     init()
@@ -34,36 +32,36 @@ struct ContentView: View {
         installationManager.deactivate()
     }
     
-    private func onViewDidLoad() -> Void
-    {
-        os_log("view loaded")
-    }
-    
     var body: some View {
         VStack {
             Image(systemName: "puzzlepiece.extension")
                 .imageScale(.large)
                 .foregroundStyle(.tint)
             
-            if (!$installationManager.isEndpointSecurityInstalled.wrappedValue)
+            if (!$installationManager.isEndpointSecurityInstalled.wrappedValue && !$installationManager.uninstallingInProgress.wrappedValue)
             {
-                Button("Install", systemImage : "square.and.arrow.down", action: onInstallationButtonPress)
+                Button("Install Extension", systemImage : "square.and.arrow.down", action: onInstallationButtonPress)
                     .cornerRadius(5)
                     .padding(.top, 10)
             }
 
-            if ($installationManager.isEndpointSecurityInstalled.wrappedValue)
+            if ($installationManager.isEndpointSecurityInstalled.wrappedValue && !$installationManager.uninstallingInProgress.wrappedValue)
             {
-                Button("Update", systemImage : "arrow.clockwise.square", action: onInstallationButtonPress)
+                Button("Update Extension", systemImage : "arrow.clockwise.square", action: onInstallationButtonPress)
                     .cornerRadius(5)
                     .padding(.top, 10)
             }
 
-            if ($installationManager.isEndpointSecurityInstalled.wrappedValue)
+            if ($installationManager.isEndpointSecurityInstalled.wrappedValue && !$installationManager.uninstallingInProgress.wrappedValue)
             {
-                Button("Uninstall", systemImage : "xmark.square", action: onUninstallationButtonPress)
+                Button("Uninstall Extension", systemImage : "xmark.square", action: onUninstallationButtonPress)
                     .cornerRadius(5)
                     .padding(.top, 10)
+            }
+            
+            if ($installationManager.uninstallingInProgress.wrappedValue)
+            {
+                Text("Uninstalling in progress!")
             }
             
             ScrollView {
@@ -71,22 +69,13 @@ struct ContentView: View {
                     Text($installationManager.status.wrappedValue)
                         .lineLimit(nil)
                         .background(.gray)
+                        .cornerRadius(5.0)
                 }
-                .frame(idealWidth: 250, maxWidth: 300)
+                .frame(idealWidth: 250, maxWidth: 300, idealHeight: 200, maxHeight: 200)
             }
         }
         .padding()
-        .onAppear {
-            if (self.viewDidLoad == false)
-            {
-                self.viewDidLoad = true
-                
-                onViewDidLoad()
-            }
-        }
     }
-    
-
 }
 
 #Preview {

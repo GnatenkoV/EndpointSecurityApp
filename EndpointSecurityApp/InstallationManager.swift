@@ -12,17 +12,37 @@ import OSLog
 class InstallationManager : NSObject, OSSystemExtensionRequestDelegate, ObservableObject
 { 
     private let extensionBoundleId : String = "com.apriorit.hnatenko.EndpointSecurityApp.Extension"
-    //private let extensionBoundleId : String = "com.apriorit.SampleEndpointApp.Extension"
+    private let extensionName : String = "com.apriorit.hnatenko.EndpointSecurityApp.Extension.systemextension"
+    private let appFolder : String = "/Library/Application Support/com.apriorit.hnatenko.EndpointSecurityApp"
     private var currentRequest : OSSystemExtensionRequest?
     
     @Published public var status = ""
     @Published public var isEndpointSecurityInstalled = false
+    @Published public var uninstallingInProgress = false
     
     override init()
     {
         super.init()
 
         isEndpointSecurityInstalled = self.isExtensionInstalled()
+        
+        createAppFilesIfNotExists()
+        
+        os_log(OSLogType.info, "args: \(CommandLine.arguments)")
+        
+        if (CommandLine.arguments.contains("-uninstall"))
+        {
+            uninstallingInProgress = true
+            
+            if (isEndpointSecurityInstalled)
+            {
+                deactivate()
+            }
+            else
+            {
+                exit(0)
+            }
+        }
     }
     
     private func isExtensionInstalled() -> Bool
@@ -47,6 +67,7 @@ class InstallationManager : NSObject, OSSystemExtensionRequestDelegate, Observab
         {
             os_log("%@", error.localizedDescription)
         }
+        
         return false
     }
     
@@ -72,11 +93,84 @@ class InstallationManager : NSObject, OSSystemExtensionRequestDelegate, Observab
         OSSystemExtensionManager.shared.submitRequest(request)
     }
     
+    private func createAppFilesIfNotExists() -> Void
+    {
+        do
+        {
+            //  Find Application Support directory
+            let directoryURL = URL(fileURLWithPath : appFolder)
+            if (!FileManager.default.fileExists(atPath: appFolder))
+            {
+                try FileManager.default.createDirectory (at: directoryURL, withIntermediateDirectories: true, attributes: nil)
+            }
+            
+            // Create test document
+            let documentPath = directoryURL.appendingPathComponent("TestFile.txt")
+            let testInfo = "test document info"
+            try testInfo.write(to: documentPath, atomically: false, encoding: String.Encoding.utf8)
+        }
+        catch
+        {
+          print("An error occured")
+        }
+    }
+    
+    /*private func clearExtensionFiles() -> Void
+    {
+        let systemExtensionURL = URL(fileURLWithPath: extensionsFolder)
+        var foldersToDelete = [URL]()
+        
+        do {
+            let resourceKeys : [URLResourceKey] = [.isDirectoryKey, .isApplicationKey]
+            let enumerator = FileManager.default.enumerator(at: systemExtensionURL,
+                                    includingPropertiesForKeys: resourceKeys,
+                                                       options: [.skipsHiddenFiles], errorHandler:
+                                                                { (url, error) -> Bool in
+                os_log(OSLogType.info, "enumerator error at: %{public}@, error:%{public}@", url.absoluteString, error.localizedDescription)
+                                                                return true
+            })!
+            
+            for case let fileURL as URL in enumerator
+            {
+                let resourceValues = try fileURL.resourceValues(forKeys: Set(resourceKeys))
+                
+                if (resourceValues.isDirectory!)
+                {
+                    let contentEnumerator = try FileManager.default.contentsOfDirectory(at: fileURL, includingPropertiesForKeys: nil, options: [])
+                    
+                    for ext in contentEnumerator
+                    {
+                        if (ext.isFileURL && ext.path.hasSuffix(extensionName))
+                        {
+                            foldersToDelete.append(fileURL)
+                            break
+                        }
+                    }
+                }
+            }
+            
+            //for folderPath in foldersToDelete
+            //{
+            //    if (FileManager.default.fileExists(atPath: folderPath.path))
+            //    {
+            //        try FileManager.default.removeItem(at: folderPath)
+            //    }
+            //}
+        } catch {
+            os_log(OSLogType.error, "%{public}@", error.localizedDescription)
+        }
+    }*/
+    
     @objc func request(_ request: OSSystemExtensionRequest, didFailWithError error: Error) -> Void
     {
         os_log("System extension request failed %@", error.localizedDescription)
         
         status += "\nSystem extension request failed: \(error.localizedDescription)"
+        
+        if (self.uninstallingInProgress)
+        {
+            exit(0)
+        }
         
         isEndpointSecurityInstalled = self.isExtensionInstalled()
     }
@@ -112,6 +206,13 @@ class InstallationManager : NSObject, OSSystemExtensionRequestDelegate, Observab
         
         status += "\nSystem extension activating request result: \(result.rawValue)"
         
+        if (self.uninstallingInProgress)
+        {
+            exit(0)
+        }
+        
         isEndpointSecurityInstalled = self.isExtensionInstalled()
+        
+        
     }
 }

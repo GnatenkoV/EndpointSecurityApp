@@ -13,6 +13,7 @@ class Utils {
     public static let FREAD : UInt32 = 0x00000001
     public static let FWRITE : UInt32 = 0x00000002
     public static let FALL : UInt32 = 0xffffffff
+    public static let FNONE : UInt32 = 0x00000000
     
     static func getAllowAccessExceptFlags(_ flags : UInt32) -> UInt32
     {
