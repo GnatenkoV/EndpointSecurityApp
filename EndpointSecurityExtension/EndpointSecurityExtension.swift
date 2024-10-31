@@ -12,17 +12,17 @@ import OSLog
 @main
 struct App
 {   
-    static var client1 : EndpointClient?
-    static var client2 : EndpointClient?
+    static var client1: EndpointClient?
+    static var client2: EndpointClient?
     
-    static private let appFolder : String = "/Library/Application Support/com.apriorit.hnatenko.EndpointSecurityApp"
+    static private let appFolder: String = "/Library/Application Support/com.apriorit.hnatenko.EndpointSecurityApp"
     
     static func createTestFiles() -> Void
     {
         do
         {
             //  Find Application Support directory
-            let directoryURL = URL(fileURLWithPath : appFolder)
+            let directoryURL = URL(fileURLWithPath: appFolder)
             if (!FileManager.default.fileExists(atPath: appFolder))
             {
                 try FileManager.default.createDirectory (at: directoryURL, withIntermediateDirectories: true, attributes: nil)
@@ -42,7 +42,7 @@ struct App
     
     static func main()
     {
-        os_log(OSLogType.fault, "init client")
+        os_log(OSLogType.debug, "init client")
         
         createTestFiles();
         

@@ -6,9 +6,14 @@
 //
 
 import SwiftUI
+import Foundation
+import AppKit
+import OSLog
 
 @main
 struct EndpointSecurityApp: App {
+    @NSApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
+    
     var body: some Scene {
         WindowGroup {
             ContentView()

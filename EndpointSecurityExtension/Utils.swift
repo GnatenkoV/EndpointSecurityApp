@@ -10,17 +10,17 @@ import EndpointSecurity
 
 class Utils {
     
-    public static let FREAD : UInt32 = 0x00000001
-    public static let FWRITE : UInt32 = 0x00000002
-    public static let FALL : UInt32 = 0xffffffff
-    public static let FNONE : UInt32 = 0x00000000
+    public static let FREAD: UInt32 = 0x00000001
+    public static let FWRITE: UInt32 = 0x00000002
+    public static let FALL: UInt32 = 0xffffffff
+    public static let FNONE: UInt32 = 0x00000000
     
-    static func getAllowAccessExceptFlags(_ flags : UInt32) -> UInt32
+    static func getAllowAccessExceptFlags(_ flags: UInt32) -> UInt32
     {
         return self.FALL & ~flags;
     }
     
-    static func esEventTypeToString(_ eventType : es_event_type_t) -> String
+    static func esEventTypeToString(_ eventType: es_event_type_t) -> String
     {
         switch(eventType)
         {
@@ -107,7 +107,7 @@ class Utils {
         }
     }
     
-    static func esEventTypeFromString(_ eventType : String) -> es_event_type_t
+    static func esEventTypeFromString(_ eventType: String) -> es_event_type_t
     {
         switch(eventType)
         {

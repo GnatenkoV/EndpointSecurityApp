@@ -6,34 +6,34 @@ public class EndpointClient
 {
     private var esClient: OpaquePointer?
     private var connected = false
-    private var events : [es_event_type_t]
-    private var callbacks : [String : (OpaquePointer, UnsafePointer<es_message_t>) -> Bool]
-    private var extraConfig : ((OpaquePointer) -> Void)?
-    private var clientName : String
+    private var events: [es_event_type_t]
+    private var callbacks: [String: (OpaquePointer, UnsafePointer<es_message_t>) -> Bool]
+    private var extraConfig: ((OpaquePointer) -> Void)?
+    private var clientName: String
     
-    init(_ name : String)
+    init(_ name: String)
     {
         self.clientName = name
-        self.callbacks = [String : (OpaquePointer, UnsafePointer<es_message_t>) -> Bool]()
+        self.callbacks = [String: (OpaquePointer, UnsafePointer<es_message_t>) -> Bool]()
         self.events = [es_event_type_t]()
     }
     
-    public func setExtraConfig(_ callback : @escaping (OpaquePointer) -> Void) -> Void
+    func setExtraConfig(_ callback: @escaping (OpaquePointer) -> Void) -> Void
     {
         if (self.connected)
         {
-            os_log(OSLogType.info, "[%{public}@] Unable to call extaConfig after start() call", self.clientName)
+            os_log(OSLogType.debug, "[%{public}@] Unable to call extaConfig after start() call", self.clientName)
             return;
         }
         
         self.extraConfig = callback
     }
     
-    public func subscribe(_ eventType : es_event_type_t,_ callback : @escaping (OpaquePointer, UnsafePointer<es_message_t>) -> Bool) -> Void
+    func subscribe(_ eventType: es_event_type_t,_ callback: @escaping (OpaquePointer, UnsafePointer<es_message_t>) -> Bool) -> Void
     {
         if (self.connected)
         {
-            os_log(OSLogType.info, "[%{public}@] Unable to subscribe after start() call", self.clientName)
+            os_log(OSLogType.debug, "[%{public}@] Unable to subscribe after start() call", self.clientName)
             return;
         }
         
@@ -41,7 +41,7 @@ public class EndpointClient
         self.callbacks[Utils.esEventTypeToString(eventType)] = callback
     }
     
-    public func start() -> Void
+    func start() -> Void
     {
         var client: OpaquePointer?
         // Create the client
@@ -58,7 +58,7 @@ public class EndpointClient
             return
         }
         
-        os_log(OSLogType.info, "[%{public}@] started to register", self.clientName)
+        os_log(OSLogType.debug, "[%{public}@] started to register", self.clientName)
         
         let creationResult = es_new_client(&client) { (_, message) in
             self.handleEvent(message)
@@ -66,11 +66,11 @@ public class EndpointClient
 
         if (creationResult != ES_NEW_CLIENT_RESULT_SUCCESS)
         {
-            os_log(OSLogType.info, "[%{public}@] Failed to create ES Client %{public}@", self.clientName, creationResult.rawValue)
+            os_log(OSLogType.error, "[%{public}@] Failed to create ES Client %{public}@", self.clientName, creationResult.rawValue)
             exit(EXIT_FAILURE)
         }
         
-        os_log(OSLogType.info, "[%{public}@] ES Client successfuly created")
+        os_log(OSLogType.debug, "[%{public}@] ES Client successfuly created")
         
         let signingResult = es_subscribe(client!, self.events, UInt32(self.events.count))
         if (signingResult != ES_RETURN_SUCCESS)
@@ -87,10 +87,10 @@ public class EndpointClient
         self.esClient = client
         self.connected = true
         
-        os_log(OSLogType.info, "[%{public}@] ES Client successfuly signed for events %{public}@", self.clientName, self.events)
+        os_log(OSLogType.debug, "[%{public}@] ES Client successfuly signed for events %{public}@", self.clientName, self.events)
     }
     
-    private func handleEvent(_ message : UnsafePointer<es_message_t>) -> Void
+    private func handleEvent(_ message: UnsafePointer<es_message_t>) -> Void
     {
         if (message.pointee.process.pointee.is_es_client)
         {
@@ -98,12 +98,12 @@ public class EndpointClient
             return
         }
         
+        // extend lifetime for message
+        es_retain_message(message)
+        
         if (events.contains(message.pointee.event_type))
         {
-            os_log(OSLogType.info, "[%{public}@] %{public}@", self.clientName, Utils.esEventTypeToString(message.pointee.event_type))
-            
-            // extend lifetime for message
-            es_retain_message(message)
+            os_log(OSLogType.debug, "[%{public}@] %{public}@", self.clientName, Utils.esEventTypeToString(message.pointee.event_type))
             
             let callback = self.callbacks[Utils.esEventTypeToString(message.pointee.event_type)]
             
@@ -113,7 +113,6 @@ public class EndpointClient
                 {
                     self.finalizeCallbackCall(message)
                 }
-                
                 // release message
                 es_release_message(message)
             }
@@ -121,10 +120,12 @@ public class EndpointClient
         else
         {
             finalizeCallbackCall(message)
+            // release message
+            es_release_message(message)
         }
     }
     
-    private func finalizeCallbackCall(_ message : UnsafePointer<es_message_t>)
+    private func finalizeCallbackCall(_ message: UnsafePointer<es_message_t>)
     {
         switch (message.pointee.event_type)
         {
